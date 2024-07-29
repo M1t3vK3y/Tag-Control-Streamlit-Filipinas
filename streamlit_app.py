@@ -3,29 +3,27 @@ import requests
 import random
 import plotly.graph_objects as go
 
-
-
 st.set_page_config(layout="wide")
 
-# Título de la aplicación
-st.title("Estadísticas de Etiquetadores ⚽ 🏃‍♂️💨")
+# Application Title
+st.title("Labelers Statistics ⚽ 🏃‍♂️💨")
 
-# Crear un sidebar para seleccionar fechas
-st.sidebar.title("Seleccionar Fechas")
+# Create a sidebar to select dates
+st.sidebar.title("Select Dates")
 
+# Calendar for the start date
+start_date = st.sidebar.date_input("Start Date")
 
-# Calendario para la fecha inicial
-start_date = st.sidebar.date_input("Fecha Inicial")
+# Calendar for the end date
+end_date = st.sidebar.date_input("End Date")
 
-# Calendario para la fecha final
-end_date = st.sidebar.date_input("Fecha Final")
-
-# Lista de tuplas que contiene las URLs y las claves API correspondientes
+# List of tuples containing URLs and corresponding API keys
 urls = [(st.secrets["URLS"]["URL1"],st.secrets["KEYS"]["KEY1"]),
         (st.secrets["URLS"]["URL2"],st.secrets["KEYS"]["KEY2"]),
         (st.secrets["URLS"]["URL3"],st.secrets["KEYS"]["KEY3"])
 ]
-# Definir una función para obtener los datos de la API y cachear los resultados
+
+# Define a function to get the data from the API and cache the results
 @st.cache_data
 def get_labelers_data(start_date, end_date):
     labelers_data = {}
@@ -50,13 +48,13 @@ def get_labelers_data(start_date, end_date):
                     labelers_data[labeler_id]["images"] += images_labeled
                     labelers_data[labeler_id]["boxes"] += boxes_labeled
         else:
-            st.error(f"Error al realizar la solicitud a la API: {url}")
+            st.error(f"Error in API request: {url}")
     return labelers_data
 
-# Obtener los datos de los etiquetadores
+# Get the labelers data
 labelers_data = get_labelers_data(start_date, end_date)
 
-# Guardar los checkbox de visibilidad para cada etiquetador
+# Save the visibility checkboxes for each labeler
 labelers_visibility = {}
 color_options = ["blue", "green", "orange", "red", "violet","gray", "white"]
 color_index = 0
@@ -68,14 +66,12 @@ for labeler_id, data in labelers_data.items():
     colored_label = f":{color}[{labeler_name}]"
     labelers_visibility[labeler_id] = st.sidebar.checkbox(colored_label, value=True, key=labeler_id)
 
-
-
 selected_labelers = {labeler_id: data for labeler_id, data in labelers_data.items() if labelers_visibility[labeler_id]}
 if selected_labelers:
-    # Dividir en dos columnas
+    # Split into two columns
     col1, col2 = st.columns(2)
     
-    # Gráfico de "Imágenes Etiquetadas"
+    # "Labeled Images" Chart
     with col1:
         fig1 = go.Figure()
         for labeler_id, data in selected_labelers.items():
@@ -87,10 +83,10 @@ if selected_labelers:
                 name=data['name'],
                 marker_color=color
             ))
-        fig1.update_layout(title='Imágenes Etiquetadas por Etiquetador 🚀🚀🚀', xaxis_title='Etiquetador', yaxis_title='Imágenes Etiquetadas')
+        fig1.update_layout(title='Labeled Images by Labeler 🚀🚀🚀', xaxis_title='Labeler', yaxis_title='Labeled Images')
         st.plotly_chart(fig1)
     
-    # Gráfico de "Cajas Etiquetadas"
+    # "Labeled Boxes" Chart
     with col2:
         fig2 = go.Figure()
         for labeler_id, data in selected_labelers.items():
@@ -102,49 +98,49 @@ if selected_labelers:
                 name=data['name'],
                 marker_color=color
             ))
-        fig2.update_layout(title='Cajas Etiquetadas por Etiquetador 🚀🚀🚀', xaxis_title='Etiquetador', yaxis_title='Cajas Etiquetadas')
+        fig2.update_layout(title='Labeled Boxes by Labeler 🚀🚀🚀', xaxis_title='Labeler', yaxis_title='Labeled Boxes')
         st.plotly_chart(fig2)
 if selected_labelers:
-    # Dividir en dos columnas
+    # Split into two columns
     col3, col4 = st.columns(2)
     
-    # Gráfico de sector para el porcentaje de "Imágenes Etiquetadas"
+    # Pie chart for the percentage of "Labeled Images"
     with col3:
         fig3 = go.Figure()
         labels = [data['name'] for data in selected_labelers.values()]
         values = [data['images'] for data in selected_labelers.values()]
         colors = [color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)] for labeler_id in selected_labelers.keys()]
         fig3.add_trace(go.Pie(labels=labels, values=values, marker=dict(colors=colors)))
-        fig3.update_layout(title='Porcentaje de Imágenes Etiquetadas por Etiquetador')
+        fig3.update_layout(title='Percentage of Labeled Images by Labeler')
         st.plotly_chart(fig3)
     
-    # Gráfico de sector para el porcentaje de "Cajas Etiquetadas"
+    # Pie chart for the percentage of "Labeled Boxes"
     with col4:
         fig4 = go.Figure()
         labels = [data['name'] for data in selected_labelers.values()]
         values = [data['boxes'] for data in selected_labelers.values()]
         colors = [color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)] for labeler_id in selected_labelers.keys()]
         fig4.add_trace(go.Pie(labels=labels, values=values, marker=dict(colors=colors)))
-        fig4.update_layout(title='Porcentaje de Cajas Etiquetadas por Etiquetador')
+        fig4.update_layout(title='Percentage of Labeled Boxes by Labeler')
         st.plotly_chart(fig4)
 if selected_labelers:
-    # Dividir en dos columnas
+    # Split into two columns
     col5, col6 = st.columns(2)
     
-    # Barra de progreso para imágenes etiquetadas
+    # Progress bar for labeled images
     with col5:
-        st.subheader('Progreso de Imágenes Etiquetadas')
+        st.subheader('Labeled Images Progress')
         for labeler_id, data in selected_labelers.items():
-            images_progress = min((data['images'] / 500), 1.0)  # Asegurar que esté dentro del rango [0.0, 1.0]
+            images_progress = min((data['images'] / 500), 1.0)  # Ensure it's within the range [0.0, 1.0]
             color = color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)]
             st.progress(images_progress)
             st.subheader(f':{color}[{data["name"]}]: {data["images"]} / 500')
 
-    # Barra de progreso para cajas etiquetadas
+    # Progress bar for labeled boxes
     with col6:
-        st.subheader('Progreso de Cajas Etiquetadas')
+        st.subheader('Labeled Boxes Progress')
         for labeler_id, data in selected_labelers.items():
-            boxes_progress = min((data['boxes'] / 8000), 1.0)  # Asegurar que esté dentro del rango [0.0, 1.0]
+            boxes_progress = min((data['boxes'] / 8000), 1.0)  # Ensure it's within the range [0.0, 1.0]
             color = color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)]
             st.progress(boxes_progress)
             st.subheader(f':{color}[{data["name"]}]: {data["boxes"]} / 8000')
