@@ -23,9 +23,9 @@ end_date = st.sidebar.date_input("End Date")
 
 # List of tuples containing URLs and corresponding API keys
 urls = [
-    (st.secrets["url1"], st.secrets["api_key1"]),
-    (st.secrets["url2"], st.secrets["api_key2"]),
-    (st.secrets["url3"], st.secrets["api_key3"])
+    (st.secrets["URLS"]["URL1"],st.secrets["KEYS"]["KEY1"]),
+        (st.secrets["URLS"]["URL2"],st.secrets["KEYS"]["KEY2"]),
+        (st.secrets["URLS"]["URL3"],st.secrets["KEYS"]["KEY3"])
 ]
 
 # Define a function to get the API data and cache the results
