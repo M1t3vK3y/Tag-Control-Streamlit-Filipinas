@@ -3,7 +3,7 @@ import requests
 import random
 import plotly.graph_objects as go
 import logging
-from functions import get_labelers_data
+#from functions import get_labelers_data
 
 def get_labelers_data(start_date, end_date):
     labelers_data = {}
