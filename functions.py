@@ -4,6 +4,7 @@ import random
 import plotly.graph_objects as go
 import logging
 
+@st.cache_data
 def get_labelers_data(start_date, end_date):
     labelers_data = {}
     logging.info(f"Fetching data from {start_date} to {end_date}")
