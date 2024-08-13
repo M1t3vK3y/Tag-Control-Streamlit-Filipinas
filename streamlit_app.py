@@ -7,7 +7,7 @@ import logging
 st.set_page_config(layout="wide")
 
 # Configure logging to save to a file
-#logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
+logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
 
 # Application Title
 st.title("Labelers Statistics ⚽ 🏃‍♂️💨")
