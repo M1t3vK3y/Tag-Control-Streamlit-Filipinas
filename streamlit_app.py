@@ -4,7 +4,8 @@ import random
 import plotly.graph_objects as go
 import logging
 from functions import get_labelers_data
- 
+import params 
+
 st.set_page_config(layout="wide")
 
 # Configure logging to save to a file
@@ -22,20 +23,9 @@ start_date = st.sidebar.date_input("Start Date")
 # Calendar for end date
 end_date = st.sidebar.date_input("End Date")
 
-# List of tuples containing URLs and corresponding API keys
-urls = [
-    (st.secrets["URLS"]["URL1"],st.secrets["KEYS"]["KEY1"]),
-        (st.secrets["URLS"]["URL2"],st.secrets["KEYS"]["KEY2"]),
-        (st.secrets["URLS"]["URL3"],st.secrets["KEYS"]["KEY3"])
-]
-
 # Get the labelers' data
 labelers_data = get_labelers_data(start_date, end_date, urls)
 
-# Store visibility checkboxes for each labeler
-labelers_visibility = {}
-color_options = ["blue", "green", "orange", "red", "violet","gray", "white"]
-color_index = 0
 for labeler_id, data in labelers_data.items():
     labeler_name = data["name"]
     random.seed(labeler_id)
