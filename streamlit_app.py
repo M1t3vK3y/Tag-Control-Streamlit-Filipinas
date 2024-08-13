@@ -4,9 +4,7 @@ import random
 import plotly.graph_objects as go
 import logging
 from functions import get_labelers_data
-
-
-    
+ 
 st.set_page_config(layout="wide")
 
 # Configure logging to save to a file
@@ -32,7 +30,6 @@ urls = [
 ]
 
 # Get the labelers' data
-
 labelers_data = get_labelers_data(start_date, end_date, urls)
 
 # Store visibility checkboxes for each labeler
