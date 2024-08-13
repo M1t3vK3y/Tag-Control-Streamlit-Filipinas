@@ -3,7 +3,7 @@ import requests
 import random
 import plotly.graph_objects as go
 import logging
-from functions.py import *
+from functions import get_labelers_data
 st.set_page_config(layout="wide")
 
 # Configure logging to save to a file
