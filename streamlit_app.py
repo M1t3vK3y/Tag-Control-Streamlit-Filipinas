@@ -3,7 +3,7 @@ import requests
 import random
 import plotly.graph_objects as go
 import logging
-from functions import *
+from functions.py import *
 st.set_page_config(layout="wide")
 
 # Configure logging to save to a file
