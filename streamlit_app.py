@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import random
 import plotly.graph_objects as go
-#import logging
+import logging
 
 st.set_page_config(layout="wide")
 
