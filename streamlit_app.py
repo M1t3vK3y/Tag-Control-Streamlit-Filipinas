@@ -33,7 +33,7 @@ urls = [
 
 # Get the labelers' data
 
-labelers_data = get_labelers_data(start_date, end_date)
+labelers_data = get_labelers_data(start_date, end_date, urls)
 
 # Store visibility checkboxes for each labeler
 labelers_visibility = {}
