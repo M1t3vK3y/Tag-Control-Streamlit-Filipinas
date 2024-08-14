@@ -36,8 +36,8 @@ for labeler_id, data in labelers_data.items():
     params.color_index += 1
     labeler_color_map[labeler_id] = color
     
-    st.markdown(f'<span style="color:{color}; font-size:24px; font-weight:bold;">{labeler_name}</span>', unsafe_allow_html=True)
-    params.labelers_visibility[labeler_id] = st.sidebar.checkbox(labeler_name, value=True, key=labeler_id)
+    colored_label = f":{color}[{labeler_name}]"
+    st.sidebar.checkbox(colored_label, value=True, key=labeler_id)
 
 selected_labelers = {labeler_id: data for labeler_id, data in labelers_data.items() if params.labelers_visibility[labeler_id]}
 if selected_labelers:
