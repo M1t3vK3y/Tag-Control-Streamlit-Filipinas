@@ -113,7 +113,7 @@ if selected_labelers:
                     images_progress = min((images / 500), 1.0)  # Asegurar que esté dentro del rango [0.0, 1.0]
                     color = labeler_color_map[labeler_id]
                     st.progress(images_progress)
-                    st.subheader(f':{color}[{data["name"]}]: {images} / 500')
+                     st.markdown(f'<span style="color:{color}">{data["name"]}</span>: {images} / 500', unsafe_allow_html=True)
 
     # Progress bar for labeled boxes
     with col6:
@@ -126,5 +126,5 @@ if selected_labelers:
                     boxes_progress = min((boxes / 8000), 1.0)  # Asegurar que esté dentro del rango [0.0, 1.0]
                     color = labeler_color_map[labeler_id]
                     st.progress(boxes_progress)
-                    st.subheader(f':{color}[{data["name"]}]: {boxes} / 8000')
+                    st.markdown(f'<span style="color:{color}">{data["name"]}</span>: {boxes} / 8000', unsafe_allow_html=True)
 
