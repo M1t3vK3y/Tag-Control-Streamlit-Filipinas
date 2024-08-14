@@ -47,7 +47,7 @@ if selected_labelers:
             color = params.color_options[list(params.labelers_visibility.keys()).index(labeler_id) % len(params.color_options)]
             fig1.add_trace(go.Bar(
                 x=[data['name']],
-                y=[data['images']],
+                y=[total_images]],
                 name=data['name'],
                 marker_color=color
             ))
@@ -62,7 +62,7 @@ if selected_labelers:
             color = params.color_options[list(params.labelers_visibility.keys()).index(labeler_id) % len(params.color_options)]
             fig2.add_trace(go.Bar(
                 x=[data['name']],
-                y=[data['boxes']],
+                y=[total_boxes],
                 name=data['name'],
                 marker_color=color
             ))
