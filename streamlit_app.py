@@ -37,7 +37,7 @@ for labeler_id, data in labelers_data.items():
     labeler_color_map[labeler_id] = color
     
     colored_label = f":{color}[{labeler_name}]"
-    st.sidebar.checkbox(colored_label, value=True, key=labeler_id)
+    params.labelers_visibility[labeler_id] = st.sidebar.checkbox(colored_label, value=True, key=labeler_id)
 
 selected_labelers = {labeler_id: data for labeler_id, data in labelers_data.items() if params.labelers_visibility[labeler_id]}
 if selected_labelers:
@@ -113,7 +113,7 @@ if selected_labelers:
                     images_progress = min((images / 500), 1.0)  # Asegurar que esté dentro del rango [0.0, 1.0]
                     color = labeler_color_map[labeler_id]
                     st.progress(images_progress)
-                    st.markdown(f'<span style="color:{color}; font-size:24px; font-weight:bold;">{data["name"]}</span>: {images} / 500', unsafe_allow_html=True)
+                    st.subheader(f':{color}[{data["name"]}]: {images} / 500')
 
     # Progress bar for labeled boxes
     with col6:
@@ -126,5 +126,4 @@ if selected_labelers:
                     boxes_progress = min((boxes / 8000), 1.0)  # Asegurar que esté dentro del rango [0.0, 1.0]
                     color = labeler_color_map[labeler_id]
                     st.progress(boxes_progress)
-                    st.markdown(f'<span style="color:{color}; font-size:24px; font-weight:bold;">{data["name"]}</span>: {boxes} / 8000', unsafe_allow_html=True)
-
+                    st.subheader(f':{color}[{data["name"]}]: {boxes} / 8000')
