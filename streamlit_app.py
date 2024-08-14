@@ -43,7 +43,7 @@ if selected_labelers:
     with col1:
         fig1 = go.Figure()
         for labeler_id, data in selected_labelers.items():
-            random.seed(labeler_id)
+            total_images = sum(data['urls'][url]['images'] for url in data['urls'])
             color = color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)]
             fig1.add_trace(go.Bar(
                 x=[data['name']],
@@ -58,7 +58,7 @@ if selected_labelers:
     with col2:
         fig2 = go.Figure()
         for labeler_id, data in selected_labelers.items():
-            random.seed(labeler_id)
+            total_boxes = sum(data['urls'][url]['boxes'] for url in data['urls'])
             color = color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)]
             fig2.add_trace(go.Bar(
                 x=[data['name']],
@@ -77,7 +77,7 @@ if selected_labelers:
     with col3:
         fig3 = go.Figure()
         labels = [data['name'] for data in selected_labelers.values()]
-        values = [data['images'] for data in selected_labelers.values()]
+        values = [sum(data['urls'][url]['images'] for url in data['urls']) for data in selected_labelers.values()]
         colors = [color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)] for labeler_id in selected_labelers.keys()]
         fig3.add_trace(go.Pie(labels=labels, values=values, marker=dict(colors=colors)))
         fig3.update_layout(title='Percentage of Images Labeled by Labeler')
@@ -87,7 +87,7 @@ if selected_labelers:
     with col4:
         fig4 = go.Figure()
         labels = [data['name'] for data in selected_labelers.values()]
-        values = [data['boxes'] for data in selected_labelers.values()]
+        values = [sum(data['urls'][url]['boxes'] for url in data['urls']) for data in selected_labelers.values()]
         colors = [color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)] for labeler_id in selected_labelers.keys()]
         fig4.add_trace(go.Pie(labels=labels, values=values, marker=dict(colors=colors)))
         fig4.update_layout(title='Percentage of Boxes Labeled by Labeler')
@@ -99,18 +99,26 @@ if selected_labelers:
     
     # Progress bar for labeled images
     with col5:
-        st.subheader('Progress of Images Labeled')
-        for labeler_id, data in selected_labelers.items():
-            images_progress = min((data['images'] / 500), 1.0)  # Ensure it is within [0.0, 1.0]
-            color = color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)]
-            st.progress(images_progress)
-            st.subheader(f':{color}[{data["name"]}]: {data["images"]} / 500')
+        st.subheader('Progreso de Imágenes Etiquetadas')
+        for url, api_key, name in urls:
+            st.markdown(f"<h4 style='text-align: center; text-decoration: underline;'>{name}</h4>", unsafe_allow_html=True)
+            for labeler_id, data in selected_labelers.items():
+                if url in data["urls"]:
+                    images = data["urls"][url]["images"]
+                    images_progress = min((images / 500), 1.0)  # Asegurar que esté dentro del rango [0.0, 1.0]
+                    color = color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)]
+                    st.progress(images_progress)
+                    st.subheader(f':{color}[{data["name"]}]: {images} / 500')
 
     # Progress bar for labeled boxes
     with col6:
-        st.subheader('Progress of Boxes Labeled')
-        for labeler_id, data in selected_labelers.items():
-            boxes_progress = min((data['boxes'] / 8000), 1.0)  # Ensure it is within [0.0, 1.0]
-            color = color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)]
-            st.progress(boxes_progress)
-            st.subheader(f':{color}[{data["name"]}]: {data["boxes"]} / 8000')
+        st.subheader('Progreso de Cajas Etiquetadas')
+        for url, api_key, name in urls:
+            st.markdown(f"<h4 style='text-align: center; text-decoration: underline;'>{name}</h4>", unsafe_allow_html=True)
+            for labeler_id, data in selected_labelers.items():
+                if url in data["urls"]:
+                    boxes = data["urls"][url]["boxes"]
+                    boxes_progress = min((boxes / 8000), 1.0)  # Asegurar que esté dentro del rango [0.0, 1.0]
+                    color = color_options[list(labelers_visibility.keys()).index(labeler_id) % len(color_options)]
+                    st.progress(boxes_progress)
+                    st.subheader(f':{color}[{data["name"]}]: {boxes} / 8000')
