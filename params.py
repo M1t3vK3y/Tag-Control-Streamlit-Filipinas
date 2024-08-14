@@ -14,5 +14,6 @@ urls = [
 ]
 # Store visibility checkboxes for each labeler
 labelers_visibility = {}
+labeler_color_map = {}
 color_options = ["blue", "green", "orange", "red", "violet","gray"]
 color_index = 0
