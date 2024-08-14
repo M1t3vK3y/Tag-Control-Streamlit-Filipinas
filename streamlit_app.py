@@ -26,11 +26,16 @@ end_date = st.sidebar.date_input("End Date")
 # Get the labelers' data
 labelers_data = get_labelers_data(start_date, end_date, params.urls)
 
+labeler_color_map = {}
+
 for labeler_id, data in labelers_data.items():
     labeler_name = data["name"]
-    random.seed(labeler_id)
+    
+    # Assign color to labeler and save in the map
     color = params.color_options[params.color_index % len(params.color_options)]
     params.color_index += 1
+    labeler_color_map[labeler_id] = color
+    
     colored_label = f":{color}[{labeler_name}]"
     params.labelers_visibility[labeler_id] = st.sidebar.checkbox(colored_label, value=True, key=labeler_id)
 
@@ -44,7 +49,7 @@ if selected_labelers:
         fig1 = go.Figure()
         for labeler_id, data in selected_labelers.items():
             total_images = sum(data['urls'][url]['images'] for url in data['urls'])
-            color = params.color_options[list(params.labelers_visibility.keys()).index(labeler_id) % len(params.color_options)]
+            color = labeler_color_map[labeler_id]
             fig1.add_trace(go.Bar(
                 x=[data['name']],
                 y=[total_images],
@@ -59,7 +64,7 @@ if selected_labelers:
         fig2 = go.Figure()
         for labeler_id, data in selected_labelers.items():
             total_boxes = sum(data['urls'][url]['boxes'] for url in data['urls'])
-            color = params.color_options[list(params.labelers_visibility.keys()).index(labeler_id) % len(params.color_options)]
+            color = labeler_color_map[labeler_id]
             fig2.add_trace(go.Bar(
                 x=[data['name']],
                 y=[total_boxes],
@@ -78,7 +83,7 @@ if selected_labelers:
         fig3 = go.Figure()
         labels = [data['name'] for data in selected_labelers.values()]
         values = [sum(data['urls'][url]['images'] for url in data['urls']) for data in selected_labelers.values()]
-        colors = [params.color_options[list(params.labelers_visibility.keys()).index(labeler_id) % len(params.color_options)] for labeler_id in selected_labelers.keys()]
+        colors = [labeler_color_map[labeler_id] for labeler_id in selected_labelers.keys()]
         fig3.add_trace(go.Pie(labels=labels, values=values, marker=dict(colors=colors)))
         fig3.update_layout(title='Percentage of Images Labeled by Labeler')
         st.plotly_chart(fig3)
@@ -88,7 +93,7 @@ if selected_labelers:
         fig4 = go.Figure()
         labels = [data['name'] for data in selected_labelers.values()]
         values = [sum(data['urls'][url]['boxes'] for url in data['urls']) for data in selected_labelers.values()]
-        colors = [params.color_options[list(params.labelers_visibility.keys()).index(labeler_id) % len(params.color_options)] for labeler_id in selected_labelers.keys()]
+        colors = [labeler_color_map[labeler_id] for labeler_id in selected_labelers.keys()]
         fig4.add_trace(go.Pie(labels=labels, values=values, marker=dict(colors=colors)))
         fig4.update_layout(title='Percentage of Boxes Labeled by Labeler')
         st.plotly_chart(fig4)
@@ -106,7 +111,7 @@ if selected_labelers:
                 if url in data["urls"]:
                     images = data["urls"][url]["images"]
                     images_progress = min((images / 500), 1.0)  # Asegurar que esté dentro del rango [0.0, 1.0]
-                    color = params.color_options[list(params.labelers_visibility.keys()).index(labeler_id) % len(params.color_options)]
+                    color = labeler_color_map[labeler_id]
                     st.progress(images_progress)
                     st.subheader(f':{color}[{data["name"]}]: {images} / 500')
 
@@ -119,6 +124,7 @@ if selected_labelers:
                 if url in data["urls"]:
                     boxes = data["urls"][url]["boxes"]
                     boxes_progress = min((boxes / 8000), 1.0)  # Asegurar que esté dentro del rango [0.0, 1.0]
-                    color = params.color_options[list(params.labelers_visibility.keys()).index(labeler_id) % len(params.color_options)]
+                    color = labeler_color_map[labeler_id]
                     st.progress(boxes_progress)
                     st.subheader(f':{color}[{data["name"]}]: {boxes} / 8000')
+
