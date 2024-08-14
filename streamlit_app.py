@@ -142,5 +142,4 @@ if selected_labelers:
                     st.progress(boxes_progress)
                     st.subheader(f':{color}[{data["name"]}]: {boxes} / 8000')
                     color_index += 1
-                    st.progress(boxes_progress)
-                    st.subheader(f':{color}[{data["name"]}]: {boxes} / 8000')
+
