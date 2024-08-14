@@ -99,7 +99,7 @@ if selected_labelers:
     
     # Progress bar for labeled images
     with col5:
-        st.subheader('Progreso de Imágenes Etiquetadas')
+        st.subheader('Progress of Images Labeled')
         for url, api_key, name in urls:
             st.markdown(f"<h4 style='text-align: center; text-decoration: underline;'>{name}</h4>", unsafe_allow_html=True)
             for labeler_id, data in selected_labelers.items():
@@ -112,7 +112,7 @@ if selected_labelers:
 
     # Progress bar for labeled boxes
     with col6:
-        st.subheader('Progreso de Cajas Etiquetadas')
+        st.subheader('Progress of Boxes Labeled')
         for url, api_key, name in urls:
             st.markdown(f"<h4 style='text-align: center; text-decoration: underline;'>{name}</h4>", unsafe_allow_html=True)
             for labeler_id, data in selected_labelers.items():
