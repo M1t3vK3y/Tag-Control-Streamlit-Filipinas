@@ -88,7 +88,7 @@ if selected_labelers:
         fig4 = go.Figure()
         labels = [data['name'] for data in selected_labelers.values()]
         values = [sum(data['urls'][url]['boxes'] for url in data['urls']) for data in selected_labelers.values()]
-        colors = [params.color_options[list(paramas.labelers_visibility.keys()).index(labeler_id) % len(params.color_options)] for labeler_id in selected_labelers.keys()]
+        colors = [params.color_options[list(params.labelers_visibility.keys()).index(labeler_id) % len(params.color_options)] for labeler_id in selected_labelers.keys()]
         fig4.add_trace(go.Pie(labels=labels, values=values, marker=dict(colors=colors)))
         fig4.update_layout(title='Percentage of Boxes Labeled by Labeler')
         st.plotly_chart(fig4)
