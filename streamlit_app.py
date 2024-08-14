@@ -24,7 +24,7 @@ start_date = st.sidebar.date_input("Start Date")
 end_date = st.sidebar.date_input("End Date")
 
 # Get the labelers' data
-labelers_data = get_labelers_data(start_date, end_date, urls)
+labelers_data = get_labelers_data(start_date, end_date, params.urls)
 
 for labeler_id, data in labelers_data.items():
     labeler_name = data["name"]
