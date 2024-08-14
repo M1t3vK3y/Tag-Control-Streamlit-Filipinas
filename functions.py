@@ -8,7 +8,7 @@ import logging
 def get_labelers_data(start_date, end_date, urls):
     labelers_data = {}
     logging.info(f"Fetching data from {start_date} to {end_date}")
-    for url, api_key in urls:
+    for url, api_key, _ in urls:
         params = {
             "api_key": api_key,
             "startDate": start_date.strftime("%Y-%m-%d"),
@@ -25,11 +25,17 @@ def get_labelers_data(start_date, end_date, urls):
                 labeler_name = labeler["displayName"]
                 images_labeled = sum(entry["imagesLabeled"] for entry in data["data"] if entry["labelerId"] == labeler_id)
                 boxes_labeled = sum(entry["boxesDrawn"] for entry in data["data"] if entry["labelerId"] == labeler_id)
+                # Save Data for each URL separately
                 if labeler_id not in labelers_data:
-                    labelers_data[labeler_id] = {"name": labeler_name, "images": images_labeled, "boxes": boxes_labeled}
-                else:
-                    labelers_data[labeler_id]["images"] += images_labeled
-                    labelers_data[labeler_id]["boxes"] += boxes_labeled
+                    labelers_data[labeler_id] = {
+                        "name": labeler_name,
+                        "urls": {}
+                    }
+                
+                labelers_data[labeler_id]["urls"][url] = {
+                    "images": images_labeled,
+                    "boxes": boxes_labeled
+                }
         else:
             st.error(f"Error making API request: {url}")
             logging.error(f"Request error to {url}: {response.status_code}")
