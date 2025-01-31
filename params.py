@@ -10,7 +10,8 @@ urls = [
         (st.secrets["URLS"]["URL2"],st.secrets["KEYS"]["KEY2"],st.secrets["NAMES"]["NAME2"]),
         (st.secrets["URLS"]["URL3"],st.secrets["KEYS"]["KEY3"],st.secrets["NAMES"]["NAME3"]),
         (st.secrets["URLS"]["URL4"],st.secrets["KEYS"]["KEY4"],st.secrets["NAMES"]["NAME4"]),
-        (st.secrets["URLS"]["URL5"],st.secrets["KEYS"]["KEY5"],st.secrets["NAMES"]["NAME5"])
+        (st.secrets["URLS"]["URL5"],st.secrets["KEYS"]["KEY5"],st.secrets["NAMES"]["NAME5"]),
+        (st.secrets["URLS"]["URL6"],st.secrets["KEYS"]["KEY6"],st.secrets["NAMES"]["NAME6"])
 ]
 # Store visibility checkboxes for each labeler
 labelers_visibility = {}
